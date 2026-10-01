@@ -1,0 +1,212 @@
+# ─────────────────────────────────────────────────────────────
+#  SGas — .gitignore
+# ─────────────────────────────────────────────────────────────
+
+# ---------- خروجی‌های ساخت ----------
+build/
+out/
+dist/
+bin/
+obj/
+
+# اجرایی‌های SGas
+sgas
+sgas.exe
+sgas.out
+*.sgas.exe
+.sgas.exe
+
+# پوشه‌های موقت ساخت (اسکریپت‌های PowerShell/Bash)
+.tmpbuild/
+.tmp-sgas-*/
+.objbuild/
+*.tmpbuild/
+
+# ---------- فایل‌های واسط کامپایل C/C++ ----------
+*.o
+*.obj
+*.lo
+*.la
+*.gch
+*.pch
+*.d
+*.dep
+
+# کتابخانه‌ها و آبجکت‌های لینک
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exp
+*.pdb
+*.ilk
+*.idb
+
+# فایل‌های LTO / خروجی بهینه‌سازی
+*.lto
+*.ltrans.o
+*.gnu.lto_*
+
+# ---------- اسمبلی و ELF (پروژه‌های دیگر مثل GnoOS) ----------
+*.elf
+*.bin
+*.img
+*.iso
+*.map
+*.lst
+*.sym
+
+# ---------- MinGW / MSYS / MSVC ----------
+*.stackdump
+*.manifest
+*.res
+*.rc.res
+*.su
+*.idb
+*.pdb
+*.exp
+*.ilk
+
+# ---------- CMake / Make / Ninja ----------
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CMakeScripts/
+CTestTestfile.cmake
+install_manifest.txt
+Testing/
+Makefile.in
+*.ninja
+.ninja_deps
+.ninja_log
+
+# ---------- پکیج‌منیجرها ----------
+vcpkg_installed/
+conanbuildinfo.*
+conaninfo.txt
+graph_info.json
+.vcpkg-root
+
+# ---------- ادیتور و IDE ----------
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.idea/
+*.iml
+*.ipr
+*.iws
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.code-workspace
+
+# Sublime / Vim / Emacs / Nano
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.*.sw?
+.\#*
+\#*\#
+*.kate-swp
+*.kate-bak
+
+# ---------- سیستم‌عامل ----------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux
+.directory
+*~
+.fuse_hidden*
+.nfs*
+
+# Redox OS (در صورت اجرا روی Redox)
+.redox_history
+
+# ---------- پوشهٔ رابط کاربری: چیزی برای نادیده‌گرفتن نیست ----------
+# Aew/*.html
+# Aew/*.css
+# Aew/*.js
+#   ↑ این‌ها بخشی از سورس هستند و باید کامیت شوند
+
+# ---------- پروفایل و ابزارهای پوسته ----------
+# اگر داخل پروژه تست‌های پوسته دارید
+*.local.sh
+*.local.ps1
+.envrc
+.env
+.venv/
+venv/
+
+# ---------- ابزارهای تست و Coverage ----------
+*.gcov
+*.gcda
+*.gcno
+*.lcov
+coverage/
+*.profraw
+*.profdata
+
+# ---------- Logs و Debug ----------
+*.log
+logs/
+debug/
+release/
+core
+core.*
+vgcore.*
+
+# ---------- فایل‌های موقت عمومی ----------
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.rej
+*.patch.tmp
+
+# ---------- دیباگرها ----------
+gdb.txt
+*.gdb-history
+.perf*
+
+# ---------- اسناد ساخته‌شده ----------
+docs/_build/
+docs/_site/
+site/
+
+# ---------- ابزارهای دیگر ----------
+.cache/
+.ccls-cache/
+.clangd/
+compile_commands.json
+.cproject
+.project
+.settings/
+
+# ---------- فایل‌های شخصی که نباید منتشر شوند ----------
+# مسیرهای سیستم کاربر
+Users/
+*.local
+*.local.*
+personal_notes.txt
+TODO.local.md

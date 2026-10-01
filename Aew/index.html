@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>SGas Playground</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>SGas <span class="ver">0.1.0</span></h1>
+        <p class="tag">زبان برنامه‌نویسی SGas — الهام از Go و Lua</p>
+    </header>
+
+    <main>
+        <section class="editor-pane">
+            <div class="toolbar">
+                <select id="examples">
+                    <option value="">— نمونه‌ها —</option>
+                    <option value="hello">hello.sgas</option>
+                    <option value="fib">fib.sgas</option>
+                    <option value="loop">حلقه و شرط</option>
+                    <option value="empty">خالی</option>
+                </select>
+                <button id="run" class="primary">▶ اجرا (Ctrl+Enter)</button>
+                <button id="clear">پاک‌سازی</button>
+                <span id="status" class="status"></span>
+            </div>
+            <textarea id="code" spellcheck="false">-- کد SGas خود را اینجا بنویسید
+func greet(name) {
+    print("Hello, " + name + "!");
+}
+
+greet("SGas");
+</textarea>
+        </section>
+
+        <section class="output-pane">
+            <div class="toolbar">
+                <span class="title">خروجی</span>
+                <button id="clearOut">پاک‌سازی خروجی</button>
+            </div>
+            <pre id="output"></pre>
+        </section>
+    </main>
+
+    <footer>
+        <span>SGas 0.1.0 — ساخته‌شده با C</span>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

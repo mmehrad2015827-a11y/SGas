@@ -1,0 +1,13 @@
+-- hello.sgas
+-- اولین برنامه با SGas
+
+func greet(name) {
+    print("Hello, " + name + "!");
+}
+
+let who = "SGas";
+greet(who);
+
+let x = 10;
+let y = 20;
+print("Sum = " + str(x + y));

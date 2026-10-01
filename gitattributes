@@ -1,0 +1,43 @@
+# ─────────────────────────────────────────────────────────────
+#  SGas — .gitattributes
+# ─────────────────────────────────────────────────────────────
+
+# پیش‌فرض: هر فایل متنی، در مخزن LF، در working-tree LF
+* text=auto eol=lf
+
+# ---------- فایل‌های سورس ----------
+*.c      text diff=cpp
+*.h      text diff=cpp
+*.cpp    text diff=cpp
+*.hpp    text diff=cpp
+*.sgas   text
+*.md     text diff=markdown
+*.html   text
+*.css    text
+*.js     text
+*.json   text
+*.sh     text eol=lf
+*.ps1    text eol=crlf
+*.ion    text eol=lf
+*.bat    text eol=crlf
+*.mk     text
+Makefile text
+
+# ---------- فایل‌های باینری (دست نزن) ----------
+*.exe    binary
+*.dll    binary
+*.lib    binary
+*.obj    binary
+*.o      binary
+*.a      binary
+*.so     binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.zip    binary
+*.tar    binary
+*.gz     binary
+*.7z     binary
+*.pdf    binary

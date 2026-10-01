@@ -1,0 +1,99 @@
+#!/usr/bin/ion
+# scripts/ion/build.ion
+# Build the SGas interpreter on Redox OS, Linux or macOS.
+
+# --- locate project root (two levels up from scripts/ion/) ---
+let script_dir = $(dirname $0)
+let root = $(cd $script_dir/../.. && pwd)
+cd $root
+
+let build_dir = "build"
+if not test -d $build_dir
+    mkdir -p $build_dir
+end
+
+# --- pick a C compiler ---
+fn get_compiler
+    if test -n "$CC"
+        if test -x "$CC"
+            echo $CC
+            return 0
+        end
+    end
+    for candidate in gcc clang cc
+        if test -x $(which $candidate 2>/dev/null)
+            echo $candidate
+            return 0
+        end
+    end
+    echo "ERROR: no C compiler found (gcc / clang / cc)" >&2
+    return 1
+end
+
+let cc = $(get_compiler)
+if test $? -ne 0
+    exit 1
+end
+
+echo "[SGas] Using compiler: $cc"
+echo "[SGas] Build root: $root"
+
+# --- sources & includes ---
+let src_files = [
+    "src/common/common.c"
+    "src/common/value.c"
+    "src/lexer/lexer.c"
+    "src/ast/ast.c"
+    "src/parser/parser.c"
+    "src/compiler/compiler.c"
+    "src/vm/vm.c"
+    "src/runtime/runtime.c"
+    "src/stdlib/stdlib.c"
+    "src/main.c"
+]
+
+let inc_dirs = [
+    "include"
+    "src/common"
+    "src/lexer"
+    "src/ast"
+    "src/parser"
+    "src/compiler"
+    "src/vm"
+    "src/runtime"
+    "src/stdlib"
+]
+
+# --- build include flags as an Ion array ---
+let inc_flags = @[]
+for dir in @inc_dirs
+    let inc_flags = @inc_flags "-I$dir"
+end
+
+# --- compile each translation unit ---
+let objs = @[]
+for src in @src_files
+    let obj_name = $src
+    let obj_name = $obj_name.replace("/", "_")
+    let obj_name = $obj_name.replace(".c", ".o")
+    let obj_path = "$build_dir/$obj_name"
+
+    echo "  CC  $src"
+    $cc -std=c11 -Wall -Wextra -O2 @inc_flags -c $src -o $obj_path
+    if test $? -ne 0
+        echo "[SGas] Compilation failed: $src" >&2
+        exit 1
+    end
+    let objs = @objs $obj_path
+end
+
+# --- link ---
+echo "[SGas] Linking ..."
+let exe = "$build_dir/sgas"
+$cc @objs -o $exe -lm
+if test $? -ne 0
+    echo "[SGas] Linking failed" >&2
+    exit 1
+end
+
+echo "[SGas] Done: $exe"

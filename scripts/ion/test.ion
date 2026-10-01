@@ -1,0 +1,121 @@
+#!/usr/bin/ion
+# scripts/ion/test.ion
+# Run the SGas unit tests on Redox OS, Linux or macOS.
+
+# --- locate project root ---
+let script_dir = $(dirname $0)
+let root = $(cd $script_dir/../.. && pwd)
+cd $root
+
+let build_dir = "build"
+if not test -d $build_dir
+    mkdir -p $build_dir
+end
+
+# --- pick the same compiler as build.ion ---
+fn get_compiler
+    if test -n "$CC"
+        if test -x "$CC"
+            echo $CC
+            return 0
+        end
+    end
+    for candidate in gcc clang cc
+        if test -x $(which $candidate 2>/dev/null)
+            echo $candidate
+            return 0
+        end
+    end
+    echo "ERROR: no C compiler found" >&2
+    return 1
+end
+
+let cc = $(get_compiler)
+if test $? -ne 0
+    exit 1
+end
+
+# --- include dirs ---
+let inc_dirs = [
+    "include"
+    "src/common"
+    "src/lexer"
+    "src/ast"
+    "src/parser"
+    "src/compiler"
+    "src/vm"
+    "src/runtime"
+    "src/stdlib"
+]
+
+let inc_flags = @[]
+for dir in @inc_dirs
+    let inc_flags = @inc_flags "-I$dir"
+end
+
+# --- object files every test links against ---
+let obj_stems = [
+    "src_common_common"
+    "src_common_value"
+    "src_lexer_lexer"
+    "src_ast_ast"
+    "src_parser_parser"
+    "src_compiler_compiler"
+    "src_vm_vm"
+    "src_runtime_runtime"
+    "src_stdlib_stdlib"
+]
+
+let objs = @[]
+for stem in @obj_stems
+    let objs = @objs "$build_dir/$stem.o"
+end
+
+# --- ensure objects exist; build once if not ---
+let first_obj = $objs[0]
+if not test -f $first_obj
+    echo "[SGas] Building objects first ..."
+    $script_dir/build.ion
+    if test $? -ne 0
+        echo "[SGas] build.ion failed" >&2
+        exit 1
+    end
+end
+
+# --- test definitions (parallel arrays: name + source) ---
+let test_names  = [ "lexer_test"  "parser_test" "vm_test" ]
+let test_srcs   = [
+    "tests/lexer_test.c"
+    "tests/parser_test.c"
+    "tests/vm_test.c"
+]
+
+let failed = 0
+
+for i in 0...$test_names.len()
+    let name = $test_names[$i]
+    let src  = $test_srcs[$i]
+    let out  = "$build_dir/$name"
+
+    echo "[TEST] $name"
+
+    $cc -std=c11 -Wall -Wextra -O2 @inc_flags $src @objs -o $out -lm
+    if test $? -ne 0
+        echo "[TEST] build failed: $name" >&2
+        let failed += 1
+        continue
+    end
+
+    $out
+    if test $? -ne 0
+        echo "[TEST] FAILED: $name" >&2
+        let failed += 1
+    end
+end
+
+if test $failed -gt 0
+    echo "[SGas] $failed test(s) failed." >&2
+    exit 1
+end
+
+echo "[SGas] All tests passed."
